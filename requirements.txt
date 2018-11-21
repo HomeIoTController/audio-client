@@ -1,0 +1,5 @@
+SpeechRecognition
+PyAudio
+Kivy
+gql
+pocketsphinx
