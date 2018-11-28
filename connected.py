@@ -44,10 +44,11 @@ class Connected(Screen):
             fetch_schema_from_transport=True,
         )
 
-        query = gql("query { me { listenerCommand  } commands { from, to } }")
+        query = gql("query { me { listenerCommand  } commands { from, to, type } }")
 
         try:
             self.app.commands = self.client.execute(query)
+            print(self.app.commands)
         except Exception as err:
             print(err)
 
@@ -122,6 +123,8 @@ class Connected(Screen):
                     exec_command = recognizer.recognize_google(audio)
                     print("-> Checking command!!!")
                     for command in data['commands']:
+                        if command['type'] != "voiceCommand":
+                            continue
                         print(exec_command)
                         print(command['from'])
                         if exec_command == command['from']:

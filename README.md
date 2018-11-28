@@ -14,4 +14,4 @@
 * For all OSs:
   * Install  [PocketSpinx](http://jrmeyer.github.io/asr/2016/01/09/Installing-CMU-Sphinx-on-Ubuntu.html)
   * `pip3 install -r requirements.txt`
-  * `python3 speech_live_recognition.py`
+  * `python3 main.py`
