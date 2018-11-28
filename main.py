@@ -4,11 +4,14 @@ import json
 from kivy.app import App
 from kivy.properties import StringProperty
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
+from kivy.config import Config
 
 from gql import gql, Client
 from gql.transport.requests import RequestsHTTPTransport
 
 from connected import Connected
+
+Config.set('kivy','window_icon','images/favicon.ico')
 
 transport = RequestsHTTPTransport(
     url='http://localhost:3000/graphql',
@@ -57,6 +60,7 @@ class LoginApp(App):
     password = StringProperty(None)
 
     def build(self):
+        self.icon = 'images/favicon.ico'
         manager = ScreenManager()
 
         manager.add_widget(Login(name='login'))
