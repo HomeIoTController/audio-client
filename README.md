@@ -14,7 +14,8 @@
   * Follow the steps [here](https://howchoo.com/g/ztbhyzfknze/how-to-install-pocketsphinx-on-a-raspberry-pi#extract-the-files-into-separate-directories)
   * `sudo apt-get install xsel xclip flac`
   * Remove line from `%(name)s=probesysfs,provider=hidinput` from `~/.kivy/config.ini`
-  * Follow the steps [here](https://jacobsalmela.com/2013/08/13/raspberry-pi-and-the-say-command-from-osx-how-to-make-your-pi-speak-at-will/)
+  * Follow the steps [here](https://www.dexterindustries.com/howto/make-your-raspberry-pi-speak/)
+  * Create `alias say=espeak -ven-us` inside `~/.bashrc` 
 
 * For all OSs:
   * Install  [PocketSpinx](http://jrmeyer.github.io/asr/2016/01/09/Installing-CMU-Sphinx-on-Ubuntu.html)
