@@ -32,7 +32,7 @@ class Connected(Screen):
         self.kill_mic_thread = threading.Event()
 
         self.transport = RequestsHTTPTransport(
-            url='http://localhost:3000/graphql',
+            url='http://192.168.2.25:3000/graphql',
             use_json=True
         )
 
@@ -115,7 +115,7 @@ class Connected(Screen):
                 call_command = recognizer.recognize_google(audio)
                 print(call_command)
                 if call_command == data['me']['listenerCommand']:
-                    os.system('say Tell me a command!')
+                    #os.system('say Tell me a command!')
                     print(data['commands'])
                     print("-> Waiting command!!!")
                     with microphone as source:
@@ -128,7 +128,7 @@ class Connected(Screen):
                         print(exec_command)
                         print(command['from'])
                         if exec_command == command['from']:
-                            os.system('say Command accepted!')
+                            #os.system('say Command accepted!')
                             mutation = gql("mutation { sendCommand(fromCommand: \"" + exec_command +"\") }")
                             try:
                                 self.client.execute(mutation)

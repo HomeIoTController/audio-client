@@ -14,7 +14,7 @@ from connected import Connected
 Config.set('kivy','window_icon','images/favicon.ico')
 
 transport = RequestsHTTPTransport(
-    url='http://localhost:3000/graphql',
+    url='http://192.168.2.25:3000/graphql',
     use_json=True,
 )
 
