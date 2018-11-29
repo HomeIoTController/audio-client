@@ -112,7 +112,7 @@ class Connected(Screen):
 
             print("-> Checking control command!!!")
             try:
-                call_command = recognizer.recognize_google(audio)
+                call_command = recognizer.recognize_sphinx(audio)
                 print(call_command)
                 if call_command == data['me']['listenerCommand']:
                     #os.system('say Tell me a command!')
@@ -120,7 +120,7 @@ class Connected(Screen):
                     print("-> Waiting command!!!")
                     with microphone as source:
                         audio = recognizer.listen(source)
-                    exec_command = recognizer.recognize_google(audio)
+                    exec_command = recognizer.recognize_sphinx(audio)
                     print("-> Checking command!!!")
                     for command in data['commands']:
                         if command['type'] != "voiceCommand":
@@ -129,10 +129,10 @@ class Connected(Screen):
                         print(command['from'])
                         if exec_command == command['from']:
                             #os.system('say Command accepted!')
-                            mutation = gql("mutation { sendCommand(fromCommand: \"" + exec_command +"\") }")
+                            mutation = gql("mutation { sendCommand(fromCommand: \"" + exec_command +"\", type: \""+ command['type'] +"\") }")
                             try:
                                 self.client.execute(mutation)
-                                os.system('say Command executed!')
+                                #os.system('say Command executed!')
                             except Exception as err:
                                 print(err)
 
