@@ -129,7 +129,7 @@ class Connected(Screen):
                         print(command['from'])
                         if exec_command == command['from']:
                             os.system('say Command accepted!')
-                            mutation = gql("mutation { sendCommand(fromCommand: \"" + exec_command +"\") }")
+                            mutation = gql("mutation { sendCommand(fromCommand: \"" + exec_command +"\", type: \""+ command['type'] +"\") }")
                             try:
                                 self.client.execute(mutation)
                                 os.system('say Command executed!')
