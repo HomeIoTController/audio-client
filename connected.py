@@ -107,11 +107,12 @@ class Connected(Screen):
     def listen_in_background(self, microphone, recognizer, data, stop_event):
         while not stop_event.wait(1):
             print("-> Waiting control command!!!")
-            with microphone as source:
-                audio = recognizer.listen(source)
-
-            print("-> Checking control command!!!")
             try:
+                with microphone as source:
+                    audio = recognizer.listen(source, timeout=3, phrase_time_limit=5)
+
+                print("-> Checking control command!!!")
+
                 call_command = recognizer.recognize_google(audio)
                 print(call_command)
                 if call_command == data['me']['listenerCommand']:
@@ -119,7 +120,7 @@ class Connected(Screen):
                     print(data['commands'])
                     print("-> Waiting command!!!")
                     with microphone as source:
-                        audio = recognizer.listen(source)
+                        audio = recognizer.listen(source, timeout=3, phrase_time_limit=5)
                     exec_command = recognizer.recognize_google(audio)
                     print("-> Checking command!!!")
                     for command in data['commands']:
@@ -138,11 +139,11 @@ class Connected(Screen):
 
                 print("------")
             except sr.UnknownValueError:
-                print("Google could not understand audio")
+                print("Could not understand audio")
             except sr.RequestError as e:
-                print("Google error; {0}".format(e))
+                print("Error; {0}".format(e))
             except Exception as e:
-                print("General error; {0}".format(e))
+                print("Error; {0}".format(e))
 
     def start_active_listen(self):
         print("Start Listening!!!")
