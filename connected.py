@@ -115,7 +115,7 @@ class Connected(Screen):
 
                 call_command = recognizer.recognize_google(audio)
                 print(call_command)
-                if call_command == data['me']['listenerCommand']:
+                if data['me']['listenerCommand'] in call_command:
                     os.system('say Tell me a command!')
                     print(data['commands'])
                     print("-> Waiting command!!!")
@@ -128,7 +128,7 @@ class Connected(Screen):
                             continue
                         print(exec_command)
                         print(command['from'])
-                        if exec_command == command['from']:
+                        if command['from'] in exec_command:
                             os.system('say Command accepted!')
                             mutation = gql("mutation { sendCommand(fromCommand: \"" + exec_command +"\", type: \""+ command['type'] +"\") }")
                             try:
