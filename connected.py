@@ -113,7 +113,7 @@ class Connected(Screen):
 
                 print("-> Checking control command!!!")
 
-                call_command = recognizer.recognize_google(audio)
+                call_command = recognizer.recognize_google(audio) # recognize_google
                 print(call_command)
                 if data['me']['listenerCommand'] in call_command:
                     os.system('say Tell me a command!')
@@ -121,7 +121,7 @@ class Connected(Screen):
                     print("-> Waiting command!!!")
                     with microphone as source:
                         audio = recognizer.listen(source, timeout=3, phrase_time_limit=5)
-                    exec_command = recognizer.recognize_google(audio)
+                    exec_command = recognizer.recognize_google(audio) # recognize_sphinx
                     print("-> Checking command!!!")
                     for command in data['commands']:
                         if command['type'] != "voiceCommand":
