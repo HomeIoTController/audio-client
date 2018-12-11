@@ -10,22 +10,27 @@ from gql import gql, Client
 from gql.transport.requests import RequestsHTTPTransport
 
 from connected import Connected
+import settings
 
 Config.set('kivy','window_icon','images/favicon.ico')
 
-transport = RequestsHTTPTransport(
-    url='http://localhost:3000/graphql',
-    use_json=True,
-)
-
-client = Client(
-    retries=3,
-    transport=transport,
-    fetch_schema_from_transport=True,
-)
-
 class Login(Screen):
     error_message = ""
+
+    def __init__(self, **kwargs):
+        self.name='login'
+        super(Login,self).__init__(**kwargs)
+
+        self.transport = RequestsHTTPTransport(
+            url=settings.apiURL,
+            use_json=True,
+        )
+
+        self.client = Client(
+            retries=3,
+            transport=self.transport,
+            fetch_schema_from_transport=True,
+        )
 
     def do_login(self, loginText, passwordText):
         app = App.get_running_app()
@@ -39,13 +44,14 @@ class Login(Screen):
 
         try:
             self.ids['error_message'].text = ""
-            app.jwt_token = client.execute(query)['login']
+            app.jwt_token = self.client.execute(query)['login']
 
             self.manager.transition = SlideTransition(direction="left")
             self.manager.current = 'connected'
 
             app.config.read(app.get_application_config())
             app.config.write()
+
         except Exception as err:
             self.ids['error_message'].text = json.loads(err.args[0].replace("\'", "\""))['message']
 

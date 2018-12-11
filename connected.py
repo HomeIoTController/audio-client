@@ -16,6 +16,8 @@ from threading import Thread
 
 import speech_recognition as sr
 
+import settings
+
 class Connected(Screen):
     microphone_list = []
     listening_is_on = False
@@ -25,14 +27,15 @@ class Connected(Screen):
     audio_thread = None
     kill_mic_thread = None
     transport = None
-    client = None
 
     def on_enter(self, *args):
 
         self.kill_mic_thread = threading.Event()
 
+        global apiURL
+
         self.transport = RequestsHTTPTransport(
-            url='http://localhost:3000/graphql',
+            url=settings.apiURL,
             use_json=True
         )
 
@@ -44,7 +47,7 @@ class Connected(Screen):
             fetch_schema_from_transport=True,
         )
 
-        query = gql("query { me { listenerCommand  } commands { from, to, type } }")
+        query = gql("query { user { listenerCommand commands { from, to, type } } }")
 
         try:
             self.app.commands = self.client.execute(query)
@@ -114,23 +117,29 @@ class Connected(Screen):
                 print("-> Checking control command!!!")
 
                 call_command = recognizer.recognize_google(audio) # recognize_google
+
                 print(call_command)
-                if data['me']['listenerCommand'] in call_command:
+
+                if data['user']['listenerCommand'] in call_command:
                     os.system('say Tell me a command!')
-                    print(data['commands'])
                     print("-> Waiting command!!!")
+
                     with microphone as source:
                         audio = recognizer.listen(source, timeout=3, phrase_time_limit=5)
-                    exec_command = recognizer.recognize_google(audio) # recognize_sphinx
+
                     print("-> Checking command!!!")
-                    for command in data['commands']:
+
+                    exec_command = recognizer.recognize_google(audio) # recognize_sphinx
+
+                    print(exec_command)
+
+                    for command in data['user']['commands']:
                         if command['type'] != "voiceCommand":
                             continue
-                        print(exec_command)
-                        print(command['from'])
+
                         if command['from'] in exec_command:
                             os.system('say Command accepted!')
-                            mutation = gql("mutation { sendCommand(fromCommand: \"" + exec_command +"\", type: \""+ command['type'] +"\") }")
+                            mutation = gql("mutation { user { sendCommand(fromCommand: \"" + exec_command +"\", type: \""+ command['type'] +"\") } }")
                             try:
                                 self.client.execute(mutation)
                                 os.system('say Command executed!')
